@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chase Greenberg | Film Portfolio</title>
   <link rel="stylesheet" href="style.css">
-  <script src="animations.js" defer></script>
+  <style>
+    .hero { visibility: hidden; }
+  </style>
 </head>
-<body style="opacity:1;">
+<body>
+
+  <!-- Countdown overlay - in HTML so it appears instantly -->
+  <div class="countdown-overlay" id="countdown-overlay">
+    <div class="countdown-number" id="countdown-number"></div>
+    <div class="countdown-circle" id="countdown-circle"></div>
+  </div>
 
   <nav>
     <div class="nav-inner">
@@ -42,6 +50,54 @@
     <p>&copy; 2026 Chase Greenberg &mdash; ENG 256: Crafting the Dramatic Film &mdash; Dr. Bradley Hammer</p>
   </footer>
 
+  <script>
+    // Countdown runs inline - no waiting for external scripts
+    (function() {
+      var overlay = document.getElementById('countdown-overlay');
+      var numEl = document.getElementById('countdown-number');
+      var circle = document.getElementById('countdown-circle');
+      var hero = document.querySelector('.hero');
 
+      var sequence = [
+        { text: '3', delay: 450 },
+        { text: '2', delay: 450 },
+        { text: '1', delay: 450 },
+        { text: 'ACTION', delay: 1000 }
+      ];
+      var idx = 0;
+
+      function showNext() {
+        if (idx >= sequence.length) {
+          overlay.classList.add('countdown-fade-out');
+          hero.style.visibility = 'visible';
+          hero.classList.add('hero-reveal');
+          setTimeout(function() { overlay.remove(); }, 600);
+          return;
+        }
+
+        var step = sequence[idx];
+        numEl.textContent = step.text;
+        numEl.classList.remove('countdown-pop');
+        void numEl.offsetWidth;
+        numEl.classList.add('countdown-pop');
+
+        if (step.text === 'ACTION') {
+          numEl.classList.add('action-text');
+        } else {
+          numEl.classList.remove('action-text');
+        }
+
+        circle.classList.remove('countdown-circle-animate');
+        void circle.offsetWidth;
+        circle.classList.add('countdown-circle-animate');
+
+        idx++;
+        setTimeout(showNext, step.delay);
+      }
+
+      showNext();
+    })();
+  </script>
+  <script src="animations.js"></script>
 </body>
 </html>

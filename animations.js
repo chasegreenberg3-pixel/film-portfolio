@@ -147,8 +147,5 @@ function init() {
     initTypewriter();
   }
 
-  // Countdown only on home page
-  if (document.querySelector('.hero')) {
-    initCountdown();
-  }
+  // Countdown is handled inline in index.html
 });
