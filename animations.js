@@ -148,4 +148,4 @@ function init() {
   }
 
   // Countdown is handled inline in index.html
-});
+}
