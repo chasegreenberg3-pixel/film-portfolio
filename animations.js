@@ -108,8 +108,12 @@ function initCountdown() {
 
 // --- 10. Smooth page transitions ---
 function initPageTransitions() {
-  // Fade in on load
-  document.body.classList.add('page-enter');
+  // On home page, skip the fade-in (countdown handles the reveal)
+  if (document.querySelector('.hero')) {
+    document.body.style.opacity = '1';
+  } else {
+    document.body.classList.add('page-enter');
+  }
 
   // Intercept internal links
   document.querySelectorAll('a').forEach(link => {
@@ -128,11 +132,18 @@ function initPageTransitions() {
 }
 
 // --- Initialize all ---
-document.addEventListener('DOMContentLoaded', () => {
+
+// Run countdown ASAP for home page — don't wait for DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+function init() {
   initPageTransitions();
   initScrollFade();
 
-  // Typewriter only on non-home pages
   if (!document.querySelector('.hero')) {
     initTypewriter();
   }
