@@ -27,19 +27,18 @@ function initTypewriter() {
   if (!heading) return;
 
   const text = heading.textContent;
-  heading.classList.add('typewriter-ready');
-  heading.textContent = '';
-  heading.classList.remove('typewriter-ready');
-  heading.classList.add('typewriter-cursor');
+  heading.innerHTML = '<span class="typewriter-text"></span><span class="typewriter-caret">|</span>';
+  const textSpan = heading.querySelector('.typewriter-text');
+  const caret = heading.querySelector('.typewriter-caret');
 
   let i = 0;
   function type() {
     if (i < text.length) {
-      heading.textContent += text.charAt(i);
+      textSpan.textContent += text.charAt(i);
       i++;
       setTimeout(type, 60);
     } else {
-      heading.classList.remove('typewriter-cursor');
+      caret.style.display = 'none';
     }
   }
   setTimeout(type, 300);
