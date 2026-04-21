@@ -69,7 +69,10 @@
 
     <div class="divider"></div>
 
-    <h2>Responses</h2>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+      <h2 style="margin-bottom: 0;">Responses</h2>
+      <button onclick="loadResponses()" style="padding: 8px 20px; font-family: 'Playfair Display', serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); background: transparent; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='var(--gold)';this.style.color='var(--dark)'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">Refresh</button>
+    </div>
     <div id="responses-container">
       <p class="loading-msg">Loading comments...</p>
     </div>
