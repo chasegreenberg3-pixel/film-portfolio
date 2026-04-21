@@ -860,10 +860,11 @@ footer a {
 
 /* --- 10. Page transitions --- */
 body {
-  opacity: 0;
+  opacity: 1;
 }
 
-body.page-enter {
+body.page-entering {
+  opacity: 0;
   animation: pageIn 0.4s ease forwards;
 }
 

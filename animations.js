@@ -108,11 +108,10 @@ function initCountdown() {
 
 // --- 10. Smooth page transitions ---
 function initPageTransitions() {
-  // On home page, skip the fade-in (countdown handles the reveal)
-  if (document.querySelector('.hero')) {
-    document.body.style.opacity = '1';
-  } else {
-    document.body.classList.add('page-enter');
+  // On home page, countdown handles the reveal. Other pages get a fade-in.
+  if (!document.querySelector('.hero')) {
+    document.body.style.opacity = '0';
+    document.body.classList.add('page-entering');
   }
 
   // Intercept internal links
