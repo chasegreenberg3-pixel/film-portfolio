@@ -27,8 +27,9 @@ function initTypewriter() {
   if (!heading) return;
 
   const text = heading.textContent;
+  heading.classList.add('typewriter-ready');
   heading.textContent = '';
-  heading.style.visibility = 'visible';
+  heading.classList.remove('typewriter-ready');
   heading.classList.add('typewriter-cursor');
 
   let i = 0;

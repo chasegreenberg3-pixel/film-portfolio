@@ -682,7 +682,7 @@ footer a {
 }
 
 /* --- 4. Typewriter cursor --- */
-.page-header h1 {
+.page-header h1.typewriter-ready {
   visibility: hidden;
 }
 
