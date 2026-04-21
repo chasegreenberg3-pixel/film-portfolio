@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discussion Forum | Chase Greenberg</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .form-container {
+      background: var(--warm-gray);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .form-container iframe {
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+    }
+    .loading-msg {
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 30px;
+    }
+    .no-posts {
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Chase Greenberg</a>
+      <div class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Me</a>
+        <a href="resume.html">Resume</a>
+        <a href="film-statement.html">Film Statement</a>
+        <a href="films.html">Films</a>
+        <a href="quotes.html">Quotes</a>
+        <a href="interviews.html">Interviews</a>
+        <a href="discussion.html" class="active">Forum</a>
+        <a href="https://www.linkedin.com/in/chase-greenberg-495a88257/" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Discussion Forum</h1>
+    <p class="subtitle">Leave a comment &amp; join the conversation</p>
+  </div>
+
+  <div class="content">
+
+    <h2>Leave a Comment</h2>
+    <div class="form-container">
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScQ_e_1FWiyJayqxvwGYOoNOvcFgq4pxeWiJKsa4YHnAmuB7w/viewform?embedded=true" height="600" title="Discussion Board Comment Form">Loading...</iframe>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>Responses</h2>
+    <div id="responses-container">
+      <p class="loading-msg">Loading comments...</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Chase Greenberg | ENG 256: Crafting the Dramatic Film | Dr. Bradley Hammer</p>
+  </footer>
+
+  <script>
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQqHCpp3kad5SqL0eCX-mnvi6m0TLj3Q_De-HZaE1fwkG9jGhpvCpliyAHxiIv2IUWBcOoELAOObRJm/pub?output=csv';
+
+    function parseCSV(text) {
+      const rows = [];
+      let current = '';
+      let inQuotes = false;
+      let row = [];
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuotes) {
+          if (ch === '"' && text[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else if (ch === '"') {
+            inQuotes = false;
+          } else {
+            current += ch;
+          }
+        } else {
+          if (ch === '"') {
+            inQuotes = true;
+          } else if (ch === ',') {
+            row.push(current.trim());
+            current = '';
+          } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+            row.push(current.trim());
+            rows.push(row);
+            row = [];
+            current = '';
+            if (ch === '\r') i++;
+          } else {
+            current += ch;
+          }
+        }
+      }
+      if (current || row.length) {
+        row.push(current.trim());
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      } catch {
+        return dateStr;
+      }
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function loadResponses() {
+      const container = document.getElementById('responses-container');
+      try {
+        const res = await fetch(SHEET_CSV_URL);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const text = await res.text();
+        const rows = parseCSV(text);
+
+        if (rows.length < 2) {
+          container.innerHTML = '<p class="no-posts">No comments yet. Be the first to leave one above!</p>';
+          return;
+        }
+
+        // Find column indices from header row
+        const headers = rows[0].map(h => h.toLowerCase());
+        const timeIdx = headers.findIndex(h => h.includes('timestamp') || h.includes('time'));
+        const nameIdx = headers.findIndex(h => h.includes('name'));
+        const commentIdx = headers.findIndex(h => h.includes('comment') || h.includes('message') || h.includes('post'));
+        const replyIdx = headers.findIndex(h => h.includes('reply') || h.includes('response'));
+
+        // Use fallback column positions if headers don't match
+        const tIdx = timeIdx >= 0 ? timeIdx : 0;
+        const nIdx = nameIdx >= 0 ? nameIdx : 1;
+        const cIdx = commentIdx >= 0 ? commentIdx : 2;
+        const rIdx = replyIdx >= 0 ? replyIdx : 3;
+
+        let html = '';
+        for (let i = rows.length - 1; i >= 1; i--) {
+          const row = rows[i];
+          const name = row[nIdx] || 'Anonymous';
+          const comment = row[cIdx] || '';
+          const date = formatDate(row[tIdx]);
+          const reply = row[rIdx] || '';
+
+          if (!comment) continue;
+
+          html += '<div class="forum-post">';
+          html += '<p class="post-author">' + escapeHTML(name) + '</p>';
+          if (date) html += '<p class="post-date">' + escapeHTML(date) + '</p>';
+          html += '<p class="post-body">' + escapeHTML(comment) + '</p>';
+
+          if (reply) {
+            html += '<div class="reply">';
+            html += '<p class="post-author">Chase Greenberg</p>';
+            html += '<p class="post-body">' + escapeHTML(reply) + '</p>';
+            html += '</div>';
+          }
+
+          html += '</div>';
+        }
+
+        container.innerHTML = html || '<p class="no-posts">No comments yet. Be the first to leave one above!</p>';
+
+      } catch (err) {
+        container.innerHTML = '<p class="no-posts">Unable to load comments. Please try again later.</p>';
+      }
+    }
+
+    loadResponses();
+  </script>
+
+  <script src="animations.js"></script>
+</body>
+</html>

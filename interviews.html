@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interviews | Chase Greenberg</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .interview-link {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    .interview-link img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+    .interview-link:hover img {
+      transform: scale(1.03);
+      filter: brightness(0.7);
+    }
+    .interview-link .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      background: rgba(201, 168, 76, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .interview-link:hover .play-btn {
+      opacity: 1;
+    }
+    .play-btn::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 12px 0 12px 22px;
+      border-color: transparent transparent transparent #0d0d0d;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Chase Greenberg</a>
+      <div class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Me</a>
+        <a href="resume.html">Resume</a>
+        <a href="film-statement.html">Film Statement</a>
+        <a href="films.html">Films</a>
+        <a href="quotes.html">Quotes</a>
+        <a href="interviews.html" class="active">Interviews</a>
+        <a href="discussion.html">Forum</a>
+        <a href="https://www.linkedin.com/in/chase-greenberg-495a88257/" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Interviews</h1>
+    <p class="subtitle">Conversations with my crew</p>
+  </div>
+
+  <div class="content">
+
+    <!-- Emma -->
+    <div class="card">
+      <h3>Emma Wallace</h3>
+      <a href="https://youtu.be/KiXat7YES5I" target="_blank" class="interview-link">
+        <img src="https://img.youtube.com/vi/KiXat7YES5I/maxresdefault.jpg" alt="Interview with Emma Wallace">
+        <div class="play-btn"></div>
+      </a>
+    </div>
+
+    <!-- Ishon -->
+    <div class="card">
+      <h3>Ishon Liao</h3>
+      <a href="https://youtu.be/oyBj6yc1fF0" target="_blank" class="interview-link">
+        <img src="https://img.youtube.com/vi/oyBj6yc1fF0/maxresdefault.jpg" alt="Interview with Ishon Liao">
+        <div class="play-btn"></div>
+      </a>
+    </div>
+
+    <!-- Jake -->
+    <div class="card">
+      <h3>Jake Cohen</h3>
+      <a href="https://youtu.be/W-po-927Eaw" target="_blank" class="interview-link">
+        <img src="https://img.youtube.com/vi/W-po-927Eaw/maxresdefault.jpg" alt="Interview with Jake Cohen">
+        <div class="play-btn"></div>
+      </a>
+    </div>
+
+    <!-- Lillian and Kat -->
+    <div class="card">
+      <h3>Lillian &amp; Kat</h3>
+      <a href="https://youtu.be/wBhyVeE6QMY" target="_blank" class="interview-link">
+        <img src="https://img.youtube.com/vi/wBhyVeE6QMY/maxresdefault.jpg" alt="Interview with Lillian and Kat">
+        <div class="play-btn"></div>
+      </a>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Chase Greenberg | ENG 256: Crafting the Dramatic Film | Dr. Bradley Hammer</p>
+  </footer>
+
+  <script src="animations.js"></script>
+</body>
+</html>
