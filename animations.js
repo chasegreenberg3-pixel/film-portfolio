@@ -139,9 +139,54 @@ if (document.readyState === 'loading') {
   init();
 }
 
+// --- Film Reel Borders ---
+function initFilmReel() {
+  ['top', 'bottom'].forEach(pos => {
+    const reel = document.createElement('div');
+    reel.className = 'film-reel film-reel-' + pos;
+    const strip = document.createElement('div');
+    strip.className = 'film-reel-strip';
+    // Create enough segments to fill 200% width
+    for (let i = 0; i < 80; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'segment';
+      strip.appendChild(seg);
+    }
+    reel.appendChild(strip);
+    document.body.appendChild(reel);
+  });
+}
+
+// --- Spotlight Cursor (home page only) ---
+function initSpotlight() {
+  if (!document.querySelector('.hero')) return;
+
+  const layer = document.createElement('div');
+  layer.className = 'spotlight-layer';
+  document.body.appendChild(layer);
+
+  let mouseInPage = false;
+
+  document.addEventListener('mousemove', function(e) {
+    if (!mouseInPage) {
+      mouseInPage = true;
+      layer.classList.add('active');
+    }
+    layer.style.background =
+      'radial-gradient(circle 200px at ' + e.clientX + 'px ' + e.clientY + 'px, transparent 0%, rgba(0,0,0,0.35) 100%)';
+  });
+
+  document.addEventListener('mouseleave', function() {
+    mouseInPage = false;
+    layer.classList.remove('active');
+  });
+}
+
 function init() {
   initPageTransitions();
   initScrollFade();
+  initFilmReel();
+  initSpotlight();
 
   if (!document.querySelector('.hero')) {
     initTypewriter();
